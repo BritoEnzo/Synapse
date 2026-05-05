@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  notes     Note[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  title      String
+  content    String   // SQLite usa String, não @db.Text
+  isArchived Boolean  @default(false)
+  isPinned   Boolean  @default(false)
+  color      String?  @default("#ffffff")
+  
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  tags       Tag[]    @relation("NoteTags")
+  versions   NoteVersion[]
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  @@index([authorId])
+  @@map("notes")
+}
+
+model Tag {
+  id    String   @id @default(cuid())
+  name  String
+  color String   @default("#3B82F6")
+  notes Note[]   @relation("NoteTags")
+  
+  @@unique([name])
+  @@map("tags")
+}
+
+model NoteVersion {
+  id        String   @id @default(cuid())
+  noteId    String
+  title     String
+  content   String
+  version   Int
+  createdAt DateTime @default(now())
+  
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  
+  @@index([noteId])
+  @@map("note_versions")
+}

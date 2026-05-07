@@ -10,9 +10,6 @@ export class NoteService {
         content,
         color: color || '#ffffff',
         authorId: userId,
-      },
-      include: {
-        tags: true
       }
     });
   }
@@ -23,9 +20,6 @@ export class NoteService {
         authorId: userId,
         deletedAt: null,
         isArchived: archived || false
-      },
-      include: {
-        tags: true
       },
       orderBy: [
         { isPinned: 'desc' },
@@ -42,7 +36,6 @@ export class NoteService {
         deletedAt: null
       },
       include: {
-        tags: true,
         versions: {
           orderBy: { version: 'desc' },
           take: 5
@@ -79,9 +72,6 @@ export class NoteService {
         title,
         content,
         updatedAt: new Date()
-      },
-      include: {
-        tags: true
       }
     });
   }

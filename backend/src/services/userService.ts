@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+// Instância padrão do PrismaClient (lê a configuração do prisma.config.ts)
 const prisma = new PrismaClient();
 
 export class UserService {

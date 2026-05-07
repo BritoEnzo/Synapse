@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -14,40 +15,21 @@ model User {
   notes     Note[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("users")
 }
 
 model Note {
   id         String   @id @default(cuid())
   title      String
-  content    String   // SQLite usa String, não @db.Text
+  content    String
   isArchived Boolean  @default(false)
   isPinned   Boolean  @default(false)
   color      String?  @default("#ffffff")
-  
   authorId   String
   author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  
-  tags       Tag[]    @relation("NoteTags")
-  versions   NoteVersion[]
-  
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   deletedAt  DateTime?
-
-  @@index([authorId])
-  @@map("notes")
-}
-
-model Tag {
-  id    String   @id @default(cuid())
-  name  String
-  color String   @default("#3B82F6")
-  notes Note[]   @relation("NoteTags")
-  
-  @@unique([name])
-  @@map("tags")
+  versions   NoteVersion[]
 }
 
 model NoteVersion {
@@ -57,9 +39,5 @@ model NoteVersion {
   content   String
   version   Int
   createdAt DateTime @default(now())
-  
   note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  
-  @@index([noteId])
-  @@map("note_versions")
 }

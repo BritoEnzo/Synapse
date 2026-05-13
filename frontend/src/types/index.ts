@@ -4,23 +4,24 @@ export interface User {
   name: string;
 }
 
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface Note {
   id: string;
   title: string;
   content: string;
+  summary?: string;           // ← ADICIONADO
   isPinned: boolean;
   isArchived: boolean;
   color: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string | null;  // ← ADICIONAR ESTA LINHA
-  tags: Tag[];
-}
-
-export interface Tag {
-  id: string;
-  name: string;
-  color: string;
+  deletedAt: string | null;
+  tags: Tag[];                // ← ADICIONADO
 }
 
 export interface AuthResponse {

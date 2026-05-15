@@ -3,7 +3,7 @@ import { Note } from '../types';
 
 export const noteService = {
   async getAll(): Promise<Note[]> {
-    const response = await api.get('/notes');
+    const response = await api.get('/notes?all=true');
     return response.data;
   },
 
@@ -17,13 +17,14 @@ export const noteService = {
     return response.data;
   },
 
-  async update(id: string, data: { title: string; content: string }): Promise<Note> {
+  async update(id: string, data: { title: string; content: string; color?: string; summary?: string; tags?: string[] }): Promise<Note> {
     const response = await api.put(`/notes/${id}`, data);
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await api.delete(`/notes/${id}`);
+  async delete(id: string): Promise<Note> {
+    const response = await api.delete(`/notes/${id}`);
+    return response.data;
   },
 
   async restore(id: string): Promise<Note> {

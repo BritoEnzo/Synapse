@@ -6,6 +6,7 @@ dotenv.config();
 
 import authRoutes from './routes/authRoutes';
 import noteRoutes from './routes/noteRoutes';
+import aiRoutes from './routes/aiRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3333;
@@ -19,6 +20,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.listen(PORT, () => {
   console.log(`🧠 Synapse API running on http://localhost:${PORT}`);

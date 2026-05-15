@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Sparkles, LogIn } from 'lucide-react';
+import { Mail, Lock, Brain, LogIn } from 'lucide-react';
 import { authService } from '../services/authService';
 import toast from 'react-hot-toast';
 
@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -41,9 +41,9 @@ export default function Login() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 mb-4"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-900 mb-4"
           >
-            <Sparkles className="w-8 h-8 text-white" />
+            <Brain className="w-8 h-8 text-white" />
           </motion.div>
           <h1 className="text-2xl font-bold text-slate-800">Synapse</h1>
           <p className="text-slate-500 text-sm">Onde suas ideias se conectam</p>
@@ -60,7 +60,7 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                 placeholder="seu@email.com"
                 required
               />
@@ -77,7 +77,7 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                 placeholder="••••••••"
                 required
               />
@@ -89,7 +89,7 @@ export default function Login() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="w-full py-2 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
@@ -104,7 +104,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-slate-500 mt-6">
           Não tem uma conta?{' '}
-          <Link to="/register" className="text-purple-600 hover:underline font-medium">
+          <Link to="/register" className="text-gray-900 hover:underline font-medium">
             Criar conta
           </Link>
         </p>

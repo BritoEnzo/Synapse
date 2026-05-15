@@ -14,17 +14,20 @@ export class NoteService {
     });
   }
 
-  async listNotes(userId: string, archived?: boolean) {
+  async listNotes(userId: string, archived?: boolean, all?: boolean) {
+    if (all) {
+      return prisma.note.findMany({
+        where: { authorId: userId },
+        orderBy: [{ isPinned: 'desc' }, { updatedAt: 'desc' }],
+      });
+    }
     return prisma.note.findMany({
       where: {
         authorId: userId,
         deletedAt: null,
-        isArchived: archived || false
+        isArchived: archived || false,
       },
-      orderBy: [
-        { isPinned: 'desc' },
-        { updatedAt: 'desc' }
-      ]
+      orderBy: [{ isPinned: 'desc' }, { updatedAt: 'desc' }],
     });
   }
 
@@ -77,9 +80,17 @@ export class NoteService {
   }
 
   async deleteNote(userId: string, noteId: string) {
+    const note = await prisma.note.findFirst({ where: { id: noteId, authorId: userId } });
+    if (!note) throw new Error('Note not found');
+
+    if (note.deletedAt) {
+      await prisma.note.delete({ where: { id: noteId } });
+      return { id: noteId, permanentlyDeleted: true };
+    }
+
     return prisma.note.update({
       where: { id: noteId },
-      data: { deletedAt: new Date() }
+      data: { deletedAt: new Date() },
     });
   }
 

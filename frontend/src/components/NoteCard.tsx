@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Pin, Archive, Trash2, Sparkles } from 'lucide-react';
 import { Note } from '../types';
+import { getContrastColors } from '../utils/colorUtils';
 
 interface NoteCardProps {
   note: Note;
@@ -20,6 +21,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
 }) => {
   const hasSummary = note.summary && note.summary.length > 0 && !note.summary.includes('carregando');
   const displayContent = hasSummary ? note.summary : note.content;
+  const c = getContrastColors(note.color || '#ffffff');
 
   return (
     <motion.div
@@ -30,73 +32,71 @@ export const NoteCard: React.FC<NoteCardProps> = ({
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
       style={{ backgroundColor: note.color || '#ffffff' }}
-      className="rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden border border-slate-200 dark:border-slate-700 cursor-pointer"
+      className="rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden border border-gray-300 border-l-4 border-l-gray-900 cursor-pointer flex flex-col h-full"
       onClick={() => onEdit(note)}
     >
-      <div className="p-4">
+      <div className="p-4 flex-1">
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center gap-2 flex-1">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
+            <h3
+              style={{ color: c.text }}
+              className="font-semibold line-clamp-1"
+            >
               {note.title || 'Sem título'}
             </h3>
             {hasSummary && (
-              <Sparkles size={14} className="text-purple-500 flex-shrink-0" />
+              <Sparkles size={14} style={{ color: c.muted }} className="flex-shrink-0" />
             )}
           </div>
           {note.isPinned && (
-            <Pin size={14} className="text-purple-500 fill-purple-500 flex-shrink-0 ml-2" />
+            <Pin size={14} style={{ color: c.text }} className="flex-shrink-0 ml-2 fill-current" />
           )}
         </div>
 
-        <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
+        <p style={{ color: c.subtext }} className="text-sm line-clamp-3">
           {displayContent || 'Clique para editar...'}
         </p>
 
         {hasSummary && (
           <div className="mt-2">
-            <span className="text-xs text-purple-500 bg-purple-50 dark:bg-purple-900/30 px-1.5 py-0.5 rounded-full inline-flex items-center gap-1">
+            <span
+              style={{ backgroundColor: c.badgeBg, color: c.badgeText }}
+              className="text-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-1"
+            >
               <Sparkles size={10} />
               Resumo IA
             </span>
           </div>
         )}
 
-        <div className="mt-3 text-xs text-slate-400">
+        <div style={{ color: c.muted }} className="mt-3 text-xs">
           {new Date(note.updatedAt).toLocaleDateString('pt-BR')}
         </div>
       </div>
 
-      <div className="flex border-t border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+      <div
+        style={{ backgroundColor: c.actionBar, borderTopColor: c.divider }}
+        className="flex border-t"
+      >
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onTogglePin(note.id);
-          }}
-          className={`flex-1 py-2 text-xs flex items-center justify-center gap-1 transition-colors ${
-            note.isPinned
-              ? 'text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/30'
-              : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
-          }`}
+          onClick={(e) => { e.stopPropagation(); onTogglePin(note.id); }}
+          style={{ color: note.isPinned ? c.text : c.actionText }}
+          className="flex-1 py-2 text-xs flex items-center justify-center gap-1 transition-colors hover:bg-black/5"
         >
           <Pin size={12} />
           {note.isPinned ? 'Fixada' : 'Fixar'}
         </button>
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleArchive(note.id);
-          }}
-          className="flex-1 py-2 text-xs flex items-center justify-center gap-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          onClick={(e) => { e.stopPropagation(); onToggleArchive(note.id); }}
+          style={{ color: c.actionText }}
+          className="flex-1 py-2 text-xs flex items-center justify-center gap-1 transition-colors hover:bg-black/5"
         >
           <Archive size={12} />
           Arquivar
         </button>
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(note.id);
-          }}
-          className="flex-1 py-2 text-xs flex items-center justify-center gap-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+          onClick={(e) => { e.stopPropagation(); onDelete(note.id); }}
+          className="flex-1 py-2 text-xs flex items-center justify-center gap-1 text-red-500 transition-colors hover:bg-red-500/10"
         >
           <Trash2 size={12} />
           Deletar

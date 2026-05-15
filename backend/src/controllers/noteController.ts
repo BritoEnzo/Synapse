@@ -16,8 +16,12 @@ export class NoteController {
 
   async list(req: Request, res: Response) {
     try {
-      const { archived } = req.query;
-      const notes = await noteService.listNotes(req.user!.id, archived === 'true');
+      const { archived, all } = req.query;
+      const notes = await noteService.listNotes(
+        req.user!.id,
+        archived === 'true',
+        all === 'true'
+      );
       res.json(notes);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
@@ -52,10 +56,9 @@ export class NoteController {
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      // Forçar o tipo como string
       const noteId = id as string;
-      await noteService.deleteNote(req.user!.id, noteId);
-      res.status(204).send();
+      const note = await noteService.deleteNote(req.user!.id, noteId);
+      res.json(note);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }

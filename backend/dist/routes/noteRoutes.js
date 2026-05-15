@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const noteController_1 = require("../controllers/noteController");
+const auth_1 = require("../middlewares/auth");
+const router = (0, express_1.Router)();
+const noteController = new noteController_1.NoteController();
+router.use(auth_1.authMiddleware);
+router.post('/', noteController.create);
+router.get('/', noteController.list);
+router.get('/:id', noteController.getById);
+router.put('/:id', noteController.update);
+router.delete('/:id', noteController.delete);
+router.post('/:id/restore', noteController.restore);
+router.post('/:id/pin', noteController.togglePin);
+router.post('/:id/archive', noteController.toggleArchive);
+exports.default = router;
